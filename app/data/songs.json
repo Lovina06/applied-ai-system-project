@@ -1,0 +1,17 @@
+[
+  {"title": "Kesariya", "artist": "Arijit Singh", "genre": "romantic", "mood": "chill", "energy": 0.4, "acousticness": 0.6},
+  {"title": "Kala Chashma", "artist": "Amar Arshi, Badshah", "genre": "party", "mood": "energetic", "energy": 0.9, "acousticness": 0.1},
+  {"title": "Tum Hi Ho", "artist": "Arijit Singh", "genre": "romantic", "mood": "sad", "energy": 0.2, "acousticness": 0.8},
+  {"title": "Zinda", "artist": "Siddharth Mahadevan", "genre": "rock", "mood": "energetic", "energy": 0.85, "acousticness": 0.15},
+  {"title": "Ilahi", "artist": "Arijit Singh", "genre": "travel", "mood": "happy", "energy": 0.6, "acousticness": 0.4},
+  {"title": "Channa Mereya", "artist": "Arijit Singh", "genre": "romantic", "mood": "sad", "energy": 0.25, "acousticness": 0.75},
+  {"title": "London Thumakda", "artist": "Labh Janjua", "genre": "wedding", "mood": "happy", "energy": 0.8, "acousticness": 0.2},
+  {"title": "Malang", "artist": "Siddharth Mahadevan", "genre": "motivational", "mood": "energetic", "energy": 0.75, "acousticness": 0.3},
+  {"title": "Ae Dil Hai Mushkil", "artist": "Arijit Singh", "genre": "romantic", "mood": "sad", "energy": 0.3, "acousticness": 0.7},
+  {"title": "Gallan Goodiyaan", "artist": "Various", "genre": "party", "mood": "happy", "energy": 0.85, "acousticness": 0.1},
+  {"title": "Naina Da Kya Kasoor", "artist": "Amit Trivedi", "genre": "pop", "mood": "chill", "energy": 0.5, "acousticness": 0.45},
+  {"title": "Apna Time Aayega", "artist": "Ranveer Singh, DIVINE", "genre": "hip-hop", "mood": "motivational", "energy": 0.9, "acousticness": 0.05},
+  {"title": "Raabta", "artist": "Arijit Singh", "genre": "romantic", "mood": "chill", "energy": 0.4, "acousticness": 0.6},
+  {"title": "Ghungroo", "artist": "Arijit Singh, Shilpa Rao", "genre": "party", "mood": "energetic", "energy": 0.88, "acousticness": 0.1},
+  {"title": "Kabira", "artist": "Tochi Raina, Rekha Bhardwaj", "genre": "folk", "mood": "reflective", "energy": 0.35, "acousticness": 0.65}
+]
