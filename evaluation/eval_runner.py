@@ -91,6 +91,60 @@ def run_consistency_check(user_text: str = "I want something chill and romantic"
     return result
 
 
+def run_adversarial_check() -> dict:
+    """
+    Feeds edge-case and garbage input through the full pipeline and
+    confirms the system degrades gracefully (no crash, sensible fallback)
+    instead of failing outright.
+    """
+    adversarial_inputs = [
+        "",
+        "   ",
+        "asdkfjaslkdfjalskdjf qwoeiruqwoeiru",
+        "🎵🎶🎧" * 20,
+        "a" * 2000,
+        "'; DROP TABLE songs; --",
+        "I want something " * 100,
+    ]
+
+    case_results = []
+    all_passed = True
+
+    for text in adversarial_inputs:
+        label = text[:30] + ("..." if len(text) > 30 else "")
+        try:
+            tags = parse_mood_input(text)
+            songs = load_songs()
+            scored = [{**s, "match_score": score_song(s, tags)} for s in songs]
+            scored.sort(key=lambda s: s["match_score"], reverse=True)
+            top_song = scored[0]["title"] if scored else None
+
+            case_results.append({
+                "input": label,
+                "tags_returned": tags,
+                "top_song": top_song,
+                "crashed": False,
+            })
+        except Exception as e:
+            all_passed = False
+            case_results.append({
+                "input": label,
+                "error": str(e),
+                "crashed": True,
+            })
+
+    result = {
+        "check": "adversarial",
+        "timestamp": datetime.now().isoformat(),
+        "total_cases": len(adversarial_inputs),
+        "cases": case_results,
+        "status": "PASS - no crashes" if all_passed else "FAIL - one or more inputs crashed the system",
+    }
+
+    logging.info(f"Adversarial check: {result['status']}")
+    return result
+
+
 if __name__ == "__main__":
     os.makedirs(RESULTS_DIR, exist_ok=True)
 
@@ -105,3 +159,9 @@ if __name__ == "__main__":
     print(json.dumps(consistency_result, indent=2))
     with open(os.path.join(RESULTS_DIR, "consistency_check.json"), "w") as f:
         json.dump(consistency_result, f, indent=2)
+
+    adversarial_result = run_adversarial_check()
+    print("\n=== Adversarial Check ===")
+    print(json.dumps(adversarial_result, indent=2))
+    with open(os.path.join(RESULTS_DIR, "adversarial_check.json"), "w") as f:
+        json.dump(adversarial_result, f, indent=2)
