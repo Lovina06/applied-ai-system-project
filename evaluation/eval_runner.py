@@ -58,10 +58,50 @@ def run_sensitivity_check(test_tags: dict = None, weight_shift: float = 0.1) -> 
     return result
 
 
+def run_consistency_check(user_text: str = "I want something chill and romantic", runs: int = 5) -> dict:
+    """
+    Calls the full pipeline multiple times with identical input and
+    checks whether the top recommendation stays stable. Flags LLM-level
+    non-determinism that could make results feel unreliable to users.
+    """
+    top_songs = []
+
+    for _ in range(runs):
+        tags = parse_mood_input(user_text)
+        songs = load_songs()
+        scored = [{**s, "match_score": score_song(s, tags)} for s in songs]
+        scored.sort(key=lambda s: s["match_score"], reverse=True)
+        top_songs.append(scored[0]["title"])
+
+    unique_tops = set(top_songs)
+    consistent = len(unique_tops) == 1
+
+    result = {
+        "check": "consistency",
+        "timestamp": datetime.now().isoformat(),
+        "input": user_text,
+        "runs": runs,
+        "top_songs_per_run": top_songs,
+        "unique_top_songs": list(unique_tops),
+        "consistent": consistent,
+        "status": "PASS - consistent output" if consistent else "FAIL - inconsistent output across runs",
+    }
+
+    logging.info(f"Consistency check: {result['status']}")
+    return result
+
+
 if __name__ == "__main__":
     os.makedirs(RESULTS_DIR, exist_ok=True)
-    result = run_sensitivity_check()
-    print(json.dumps(result, indent=2))
 
+    sensitivity_result = run_sensitivity_check()
+    print("=== Sensitivity Check ===")
+    print(json.dumps(sensitivity_result, indent=2))
     with open(os.path.join(RESULTS_DIR, "sensitivity_check.json"), "w") as f:
-        json.dump(result, f, indent=2)
+        json.dump(sensitivity_result, f, indent=2)
+
+    consistency_result = run_consistency_check()
+    print("\n=== Consistency Check ===")
+    print(json.dumps(consistency_result, indent=2))
+    with open(os.path.join(RESULTS_DIR, "consistency_check.json"), "w") as f:
+        json.dump(consistency_result, f, indent=2)
